@@ -11,6 +11,9 @@ output:
 library(flexdashboard)
 library(dplyr)
 library(tidyverse)
+library(DT)
+library(shiny)
+library(ggplot2)
 
 dataPath <- 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv'
 loadData <- function(dataPath){
@@ -25,29 +28,57 @@ loadData <- function(dataPath){
 }
 spotify <- loadData(dataPath)
 ```
+About
+=====================================  
+    
+Column {data-width=600}
+-------------------------------------
 
-Column {data-width=650}
------------------------------------------------------------------------
-
-### Chart A
-
+The Data {data-orientation=rows}
+=====================================     
+   
+Row {data-height=600}
+-------------------------------------
+### Taking a look at the data
 ```{r}
-
+tableData <- spotify %>%
+  select(!c(track_id, track_album_release_date, playlist_id, track_album_id))
+DT::renderDataTable(tableData)
 ```
 
-Column {data-width=350}
+
+Analysis {data-orientation=rows}
+=====================================     
+   
+Row {data-height=600}
+-------------------------------------
+
+Interactive: Musical features by genre {data-orientation=rows}
+=====================================     
+   
+Row {data-height=600}
+-------------------------------------
+Column {.sidebar}
 -----------------------------------------------------------------------
-
-### Chart B
-
 ```{r}
-textInput("name", "What is your name?")
+selectInput("genre", label = "Select a genre:",
+            choices = unique(spotify$playlist_genre), selected = "rock")
 
 ```
-
-### Chart C
-
+Column {data-height=1000}
+-----------------------------------------------------------------------
 ```{r}
-
+renderPlot({genreFeats <- spotify %>%
+  select(danceability, energy, speechiness, acousticness, liveness, instrumentalness, playlist_genre) %>%
+  filter(playlist_genre==input$genre)%>%
+  select(danceability, energy, speechiness, acousticness, liveness, instrumentalness) %>%
+  colMeans()%>%
+  as.data.frame() %>%
+  rownames_to_column("feature") %>%
+  rename("avg"= ".")
+  ggplot(genreFeats, aes(x=feature, y=avg))+
+  geom_bar(stat="identity")+
+  xlab("Musical Feature")+
+  ylab("Average value")})
 ```
 
