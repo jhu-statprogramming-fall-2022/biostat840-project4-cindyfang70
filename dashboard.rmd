@@ -1,0 +1,53 @@
+---
+title: "Spotify Songs"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(dplyr)
+library(tidyverse)
+
+dataPath <- 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv'
+loadData <- function(dataPath){
+  if (!exists("data/spotify_songs.csv")){
+    system("mkdir -p data")
+    spotify_songs <- readr::read_csv(dataPath)
+    write.csv(spotify_songs, "data/spotify_songs.csv")
+  }else{
+    spotify_songs <- read.csv("data/spotify_songs.csv")
+  }
+  return(spotify_songs)
+}
+spotify <- loadData(dataPath)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+textInput("name", "What is your name?")
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
