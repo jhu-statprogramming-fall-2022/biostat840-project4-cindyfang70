@@ -4,7 +4,8 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
-    runtime: shiny
+runtime: shiny
+source_code: embed
 ---
 
 ```{r setup, include=FALSE}
@@ -14,6 +15,7 @@ library(tidyverse)
 library(DT)
 library(shiny)
 library(ggplot2)
+library(knitr)
 
 dataPath <- 'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-21/spotify_songs.csv'
 loadData <- function(dataPath){
@@ -47,12 +49,6 @@ DT::renderDataTable(tableData)
 ```
 
 
-Analysis {data-orientation=rows}
-=====================================     
-   
-Row {data-height=600}
--------------------------------------
-
 Interactive: Musical features by genre {data-orientation=rows}
 =====================================     
    
@@ -76,10 +72,12 @@ renderPlot({genreFeats <- spotify %>%
   as.data.frame() %>%
   rownames_to_column("feature") %>%
   rename("avg"= ".")
-  ggplot(genreFeats, aes(x=feature, y=avg))+
+  p <- ggplot(genreFeats, aes(x=feature, y=avg))+
   geom_bar(stat="identity")+
   xlab("Musical Feature")+
-  ylab("Average value")})
+  ylab("Average value")
+  
+  print(p)})
 ```
 Interactive: Random song generator {data-orientation=rows}
 =====================================     
@@ -109,3 +107,38 @@ renderText({
 
 ```
 
+
+Static:  {data-orientation=rows}
+=====================================     
+Column {.tabset}
+-----------------------------------------------------------------------
+
+
+### Popularity
+```{r}
+spotifyPop <- spotify %>%
+  group_by(playlist_genre) %>%
+  select(track_popularity, playlist_genre)%>%
+  group_modify(~ as.data.frame(mean(.$track_popularity)))
+
+colnames(spotifyPop) <- c("genre", "averagePop")
+
+renderPlot({ggplot(spotifyPop, aes(x=genre, y=averagePop))+
+  geom_bar(stat="identity")+
+  xlab("Genre")+
+  ylab("Average popularity")+
+  ggtitle("Average popularity of songs in each genre")})
+```
+
+
+### Playlist
+
+```{r, out.extra=c('allow="encrypted-media"', 'allowtransparency="true"', 'frameBorder="0"')}
+knitr::include_url("https://open.spotify.com/embed/playlist/5uPUkCs6k2TvYc2RXjJjYs?utm_source=generator", height = "380")
+```
+
+Analysis {data-orientation=rows}
+=====================================     
+   
+Row {data-height=600}
+-------------------------------------
