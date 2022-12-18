@@ -81,4 +81,31 @@ renderPlot({genreFeats <- spotify %>%
   xlab("Musical Feature")+
   ylab("Average value")})
 ```
+Interactive: Random song generator {data-orientation=rows}
+=====================================     
+   
+Row {data-height=600}
+-------------------------------------
+Column {.sidebar}
+-----------------------------------------------------------------------
+```{r}
+selectInput("genre2", label = "Select a genre to get a random song from that genre:",
+            choices = unique(spotify$playlist_genre), selected = "rock")
+
+```
+Column {data-height=1000}
+-----------------------------------------------------------------------
+```{r}
+renderText({
+  songNames <- spotify %>%
+    filter(playlist_genre == input$genre2)%>%
+    select(track_name, track_artist)
+  ind <- sample(1:length(songNames$track_name), 1)
+  name <- songNames[[ind,1]]
+  artist <- songNames[[ind,2]]
+  print(paste(name, "by", artist))
+
+})
+
+```
 
