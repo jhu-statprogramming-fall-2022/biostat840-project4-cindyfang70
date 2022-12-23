@@ -32,13 +32,26 @@ spotify <- loadData(dataPath)
 ```
 About
 =====================================  
+The purpose of this dashboard is to explore how features of songs in different genres vary. As well, we are interested in comparing the overall popularity of different genres of music and how the musical features affect popularity. The data and data dictionary can be found [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-01-21).
+
     
 Column {data-width=600}
 -------------------------------------
 
+```{r}
+library("vembedr")
+link <- "https://youtu.be/AvPrD-rqTV0"
+embed_url(link) %>%
+  div(class = "vembedr")
+```
+
+
 The Data {data-orientation=rows}
 =====================================     
-   
+Row {data-height=75}
+-------------------------------------
+This dataset consists of songs from Spotify playlists of specific genres, as well as musical features for each of the songs such as the rhythm, danceability, and loudness. This dataset also includes the popularity for each of the songs.
+
 Row {data-height=600}
 -------------------------------------
 ### Taking a look at the data
