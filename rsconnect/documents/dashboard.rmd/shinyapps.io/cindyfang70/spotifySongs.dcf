@@ -1,0 +1,14 @@
+name: spotifySongs
+title: spotifySongs
+username:
+account: cindyfang70
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7937963
+bundleId: 6668918
+url: https://cindyfang70.shinyapps.io/spotifySongs/
+when: 1671829816.12441
+lastSyncTime: 1671829816.12442
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: data/spotify_songs.csv
